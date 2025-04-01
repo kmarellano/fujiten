@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Game Development Boilerplate
+
+A modern, opinionated Next.js boilerplate configured for game development projects with built-in code quality tools and optimizations.
+
+## Features
+
+- ⚡️ [Next.js 15](https://nextjs.org/) with App Router and Server Components
+- 🎮 Optimized for game development
+- 💅 [Tailwind CSS](https://tailwindcss.com/) with custom theme configuration
+- 🔍 [ESLint](https://eslint.org/) with Next.js configuration
+- ✨ [Prettier](https://prettier.io/) for code formatting
+- 🐶 [Husky](https://typicode.github.io/husky/) for Git hooks
+- 📝 [Commitlint](https://commitlint.js.org/) for conventional commits
+- 🎨 SVG support with [@svgr/webpack](https://react-svgr.com/)
+- 🔄 Hot reload with Turbopack
+- 📱 Responsive design ready
+- 🌗 Light/Dark mode support
+- 🎯 TypeScript strict mode enabled
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- npm/yarn
+
+## Project Structure
+
+```
+├── src/
+│   ├── app/              # App router pages
+│   ├── components/       # React components
+│   │   ├── ui/           # ShadCN-generated components
+│   │   ├── layouts/      # Layout components
+│   ├── lib/              # Utility functions
+│   ├── hooks/            # Custom hooks
+│   ├── styles/           # Global styles
+├── public/               # Static assets
+└── ...config files       # Next.js and project config files (next.config.js, tsconfig.json, etc.)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Code Quality Tools
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prettier
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Automatic code formatting on save
+- Customizable through `.prettierrc`
+- Ignores specified files via `.prettierignore`
 
-## Learn More
+### ESLint
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js and TypeScript specific rules
+- Integrated with Prettier
+- Customizable through `eslint.config.mjs`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Husky & Commitlint
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Pre-commit hooks for code quality
+- Conventional commit message enforcement
+- Lint-staged for optimized linting
 
-## Deploy on Vercel
+## Development Workflow
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Make your changes
+2. Checkout to main: `git checkout -b feat/branch`
+3. Stage your changes: `git add .`
+4. Commit using conventional commits: `git commit -m "feat: add new feature"`
+5. Push to your repository: `git push`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Support
+
+For support, please open an issue in the GitHub repository.
