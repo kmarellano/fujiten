@@ -16,6 +16,7 @@
         "styles": "@/styles",
         "utils": "@/lib/utils",
         "ui": "@/components/ui",
+        "types": "@/types",
         "stores": "@/stores",
         "components": "@/components"
     },

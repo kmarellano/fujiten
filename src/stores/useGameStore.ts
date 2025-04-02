@@ -1,5 +1,23 @@
 import { create } from 'zustand';
+import { GameState } from '../types';
 
-interface GameState {}
+export const useGameStore = create<GameState>()((set) => ({
+    initialX: 0,
+    initialY: 0,
+    currentX: 0,
+    currentY: 0,
+    isSelecting: false,
 
-export const useGameStore = create<GameState>()((set) => ({}));
+    setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
+    setInitialPosition: (x, y) => set(() => ({ initialX: x, initialY: y })),
+    setCurrentPosition: (x, y) => set(() => ({ currentX: x, currentY: y })),
+
+    resetPositions: () =>
+        set(() => ({
+            initialX: 0,
+            initialY: 0,
+            currentX: 0,
+            currentY: 0,
+            isSelecting: false,
+        })),
+}));
