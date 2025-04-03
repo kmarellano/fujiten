@@ -1,2 +1,10 @@
 export type { AppleIconProps } from './apple';
-export type { Position, GameState } from './game';
+export type {
+    Position,
+    GameState,
+    CellMatrix,
+    SelectedCells,
+    SelectedNumbers,
+    SelectionBoxStyle,
+    SelectedPositions,
+} from './game';
