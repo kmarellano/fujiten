@@ -12,13 +12,14 @@
     },
     "aliases": {
         "lib": "@/lib",
+        "types": "@/types",
         "hooks": "@/hooks",
+        "config": "@/config",
+        "stores": "@/stores",
         "styles": "@/styles",
         "utils": "@/lib/utils",
-        "ui": "@/components/ui",
-        "types": "@/types",
-        "stores": "@/stores",
-        "components": "@/components"
+        "components": "@/components",
+        "ui": "@/components/ui"
     },
     "iconLibrary": "lucide"
 }

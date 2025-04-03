@@ -8,9 +8,17 @@ import {
     useMemo,
     Fragment,
 } from 'react';
-import { cn } from '@/lib/utils';
 import { useGameStore } from '@/stores';
 import { AppleIcon } from '@/components/AppleIcon';
+
+import { cn } from '@/lib/utils';
+import { GridSolver } from '@/lib/gridUtils';
+import {
+    validSets,
+    GRID_COL,
+    GRID_ROW,
+    MAX_NUMBER,
+} from '@/config/gridConstants';
 
 import type React from 'react';
 import type {
@@ -22,10 +30,6 @@ import type {
     SelectedPositions,
     AnimatedApple,
 } from '@/types';
-
-const GRID_COL = 15;
-const GRID_ROW = 10;
-const MAX_NUMBER = 9;
 
 export default function Home() {
     const {
@@ -51,18 +55,18 @@ export default function Home() {
     const playgroundRef = useRef<HTMLDivElement>(null);
     const cellRefs = useRef<Array<Array<HTMLDivElement | null>>>([]);
 
-    const generateRandomGrid = useCallback(() => {
-        return Array.from({ length: GRID_ROW }, () =>
-            Array.from(
-                { length: GRID_COL },
-                () => Math.floor(Math.random() * MAX_NUMBER) + 1,
-            ),
-        );
-    }, []);
-
     useEffect(() => {
-        setGrid(generateRandomGrid());
-    }, [generateRandomGrid]);
+        const gridSolver = new GridSolver(
+            GRID_ROW,
+            GRID_COL,
+            validSets,
+            MAX_NUMBER,
+        );
+
+        const gridData = gridSolver.generateSolvableGrid();
+
+        setGrid(gridData);
+    }, []);
 
     const getCurrentPosition = (
         ref: React.RefObject<HTMLDivElement | null>,
@@ -226,7 +230,7 @@ export default function Home() {
     const handleMouseUp = useCallback(() => {
         resetPositions();
 
-        if (selectedCells.sum === 10) {
+        if (selectedCells.sum === MAX_NUMBER + 1) {
             createAnimatedApples();
             deleteSelectedNumbers();
         }
@@ -282,7 +286,7 @@ export default function Home() {
     return (
         <section>
             <div
-                className="grid grid-cols-15 grid-rows-10 mb-6 p-4 bg-accent border-2 border-accent-foreground w-fit min-w-[70rem] h-auto select-none"
+                className="grid grid-cols-15 grid-rows-10 mb-6 p-4 bg-accent border-2 border-accent-foreground w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -322,7 +326,7 @@ export default function Home() {
                                 'absolute border-2 border-destructive/80 bg-destructive/30 pointer-events-none z-10',
                                 {
                                     'border-2 border-amber-200 bg-amber-400/40 shadow-lg':
-                                        selectedCells.sum === 10,
+                                        selectedCells.sum === MAX_NUMBER + 1,
                                 },
                             )}
                             style={getSelectionBoxStyle() || {}}
