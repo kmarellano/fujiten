@@ -20,10 +20,13 @@ export interface GameState {
     currentY: number | null;
     isSelecting: boolean;
     selectedCells: SelectedCells;
+    animatedApples: AnimatedApple[];
     setInitialPosition: (x: number, y: number) => void;
     setCurrentPosition: (x: number, y: number) => void;
     setIsSelecting: (isSelecting: boolean) => void;
     setSelectedCells: (selectedCells: Omit<SelectedCells, 'sum'>) => void;
+    setAnimatedApples: (animatedApples: AnimatedApple[]) => void;
+    updateAnimatedApples: (gravity?: number) => void;
     resetPositions: () => void;
 }
 
@@ -32,4 +35,14 @@ export interface SelectionBoxStyle {
     top: number;
     width: number;
     height: number;
+}
+
+export interface AnimatedApple {
+    id: string;
+    value: number;
+    x: number;
+    y: number;
+    velocityX: number;
+    velocityY: number;
+    rotation: number;
 }

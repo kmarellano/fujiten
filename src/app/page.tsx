@@ -20,6 +20,7 @@ import type {
     SelectedCells,
     SelectedNumbers,
     SelectedPositions,
+    AnimatedApple,
 } from '@/types';
 
 const GRID_COL = 15;
@@ -34,14 +35,17 @@ export default function Home() {
         currentY,
         isSelecting,
         selectedCells,
+        animatedApples,
         setIsSelecting,
         setInitialPosition,
         setCurrentPosition,
         setSelectedCells,
+        setAnimatedApples,
+        updateAnimatedApples,
         resetPositions,
     } = useGameStore();
 
-    const [grid, setGrid] = useState<number[][]>([]);
+    const [grid, setGrid] = useState<(number | null)[][]>([]);
     const animationRef = useRef<number>(0);
     const lastUpdateRef = useRef<number>(0);
     const playgroundRef = useRef<HTMLDivElement>(null);
@@ -74,6 +78,16 @@ export default function Home() {
 
         return { x, y };
     };
+
+    const deleteSelectedNumbers = useCallback(() => {
+        const newGrid = [...grid];
+
+        selectedCells.positions.forEach(({ row, col }) => {
+            newGrid[row][col] = null;
+        });
+
+        setGrid(newGrid);
+    }, [selectedCells, grid]);
 
     const handleMouseDown = useCallback(
         (e: React.MouseEvent): void => {
@@ -169,12 +183,61 @@ export default function Home() {
         ],
     );
 
+    const createAnimatedApples = useCallback(() => {
+        const newAnimatedApples = selectedCells.positions
+            .map((pos, index) => {
+                const cell = cellRefs.current[pos.row][pos.col];
+                if (!cell || !playgroundRef.current) return null;
+
+                const cellRect = cell.getBoundingClientRect();
+                const gridRect = playgroundRef.current.getBoundingClientRect();
+
+                const velocityX = 5;
+                return {
+                    id: `${pos.row}-${pos.col}`,
+                    x: cellRect.left - gridRect.left,
+                    y: cellRect.top - gridRect.top,
+                    value: selectedCells.numbers[index],
+                    velocityX: index % 2 === 0 ? -velocityX : velocityX,
+                    velocityY: -10,
+                    rotation: 360,
+                };
+            })
+            .filter(Boolean) as AnimatedApple[];
+
+        setAnimatedApples(newAnimatedApples);
+    }, [selectedCells, cellRefs, playgroundRef, setAnimatedApples]);
+
+    useEffect(() => {
+        if (animatedApples.length === 0) return;
+
+        let rafId: number;
+        const gravity = 0.8;
+
+        const animate = () => {
+            updateAnimatedApples(gravity);
+            rafId = requestAnimationFrame(animate);
+        };
+
+        rafId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(rafId);
+    }, [animatedApples.length, updateAnimatedApples]);
+
     const handleMouseUp = useCallback(() => {
-        setIsSelecting(false);
         resetPositions();
 
+        if (selectedCells.sum === 10) {
+            createAnimatedApples();
+            deleteSelectedNumbers();
+        }
+
         cancelAnimationFrame(animationRef.current);
-    }, [setIsSelecting, resetPositions]);
+    }, [
+        selectedCells,
+        resetPositions,
+        createAnimatedApples,
+        deleteSelectedNumbers,
+    ]);
 
     useEffect(() => {
         document.addEventListener('mouseup', handleMouseUp);
@@ -238,14 +301,16 @@ export default function Home() {
                                     cellRefs.current[rowIndex][colIndex] = el;
                                 }}
                             >
-                                <AppleIcon
-                                    text={num !== null ? num : ''}
-                                    size="sm"
-                                    {...selectedCellDesign({
-                                        row: rowIndex,
-                                        col: colIndex,
-                                    })}
-                                />
+                                {num !== null && (
+                                    <AppleIcon
+                                        text={num}
+                                        size="sm"
+                                        {...selectedCellDesign({
+                                            row: rowIndex,
+                                            col: colIndex,
+                                        })}
+                                    />
+                                )}
                             </div>
                         ));
                     })}
@@ -262,6 +327,21 @@ export default function Home() {
                             style={getSelectionBoxStyle() || {}}
                         ></div>
                     )}
+
+                    {animatedApples.map((apple) => (
+                        <div
+                            key={apple.id}
+                            className="absolute pointer-events-none animate-pop"
+                            style={{
+                                position: 'fixed',
+                                left: `${apple.x}px`,
+                                top: `${apple.y}px`,
+                                transform: `translate(-50%, -50%) rotate(${apple.rotation}deg))`,
+                            }}
+                        >
+                            <AppleIcon text={apple.value} size="sm" />
+                        </div>
+                    ))}
                 </Fragment>
             </div>
         </section>

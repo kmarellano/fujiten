@@ -7,4 +7,5 @@ export type {
     SelectedNumbers,
     SelectionBoxStyle,
     SelectedPositions,
+    AnimatedApple,
 } from './game';
