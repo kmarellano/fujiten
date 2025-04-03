@@ -264,6 +264,7 @@ export default function Home() {
 
     const selectedCellDesign = useMemo(() => {
         return (selected: CellMatrix) =>
+            isSelecting &&
             selectedCells.positions.some(
                 (cell) =>
                     cell.row === selected.row && cell.col === selected.col,
@@ -273,7 +274,7 @@ export default function Home() {
                       stroke: '4',
                   }
                 : {};
-    }, [selectedCells]);
+    }, [isSelecting, selectedCells]);
 
     const isUserPlaying =
         isSelecting && initialX && initialY && currentX && currentY;
@@ -281,7 +282,7 @@ export default function Home() {
     return (
         <section>
             <div
-                className="grid grid-cols-15 grid-rows-10 mb-6 p-4 bg-accent border-2 border-accent-foreground w-fit min-w-[70rem] h-auto"
+                className="grid grid-cols-15 grid-rows-10 mb-6 p-4 bg-accent border-2 border-accent-foreground w-fit min-w-[70rem] h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
