@@ -33,7 +33,7 @@ const AppleIcon = memo(
                             y2="100%"
                         >
                             <stop offset="0%" stopColor="#ff6b6b" />
-                            <stop offset="100%" stopColor="red" />
+                            <stop offset="50%" stopColor="red" />
                         </linearGradient>
                     </defs>
 
@@ -47,11 +47,11 @@ const AppleIcon = memo(
 
                     <ellipse
                         cx="24"
-                        cy="28"
+                        cy="25"
                         rx="4"
                         ry="6"
                         fill="white"
-                        fillOpacity="0.4"
+                        fillOpacity="0.3"
                         transform="rotate(-15 24 28)"
                     />
 
@@ -66,7 +66,7 @@ const AppleIcon = memo(
                     <text
                         x="50%"
                         y="50%"
-                        fontSize="20"
+                        fontSize="14"
                         fontWeight="bold"
                         fill="white"
                         textAnchor="middle"
