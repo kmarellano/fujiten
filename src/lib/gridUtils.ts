@@ -2,6 +2,7 @@ export class GridSolver {
     private grid: (number | null)[][];
     private validSets: number[][];
     private maxNumber: number;
+    private gridVariance: number;
 
     constructor(
         gridRow: number,
@@ -14,6 +15,7 @@ export class GridSolver {
             .map(() => Array(gridCol).fill(null));
         this.validSets = validSets;
         this.maxNumber = maxNumber;
+        this.gridVariance = 0.5;
     }
 
     private isSpaceAvailable(
@@ -35,11 +37,13 @@ export class GridSolver {
         const isHorizontallyFit = col + set.length <= this.grid[0].length;
         const isVerticallyFit = row + set.length <= this.grid.length;
 
-        const setToPlace = Math.random() < 0.4 ? set.reverse() : set;
+        const setToPlace =
+            Math.random() > this.gridVariance ? set.reverse() : set;
+
         if (
             isHorizontallyFit &&
             this.isSpaceAvailable(row, col, set, true) &&
-            Math.random() > 0.5
+            Math.random() > this.gridVariance
         ) {
             setToPlace.forEach((num, i) => {
                 this.grid[row][col + i] = num;
@@ -90,23 +94,26 @@ export class GridSolver {
     }
 
     public generateSolvableGrid(): (number | null)[][] {
-        this.grid.forEach((row, rowIndex) => {
-            row.forEach((_, colIndex) => {
-                if (this.grid[rowIndex][colIndex] === null) {
-                    const possibleSets = this.generatePossibleSets(
-                        rowIndex,
-                        colIndex,
-                    );
+        const positions = this.grid
+            .flatMap((row, rowIndex) =>
+                row.map((_, colIndex) => [rowIndex, colIndex]),
+            )
+            .sort(() => Math.random() - this.gridVariance);
 
-                    if (possibleSets.length > 0) {
-                        const selectedSet =
-                            possibleSets[
-                                Math.floor(Math.random() * possibleSets.length)
-                            ];
-                        this.placeSet(rowIndex, colIndex, selectedSet);
-                    }
+        positions.forEach(([rowIndex, colIndex]) => {
+            if (this.grid[rowIndex][colIndex] === null) {
+                const possibleSets = this.generatePossibleSets(
+                    rowIndex,
+                    colIndex,
+                );
+                if (possibleSets.length > 0) {
+                    const selectedSet =
+                        possibleSets[
+                            Math.floor(Math.random() * possibleSets.length)
+                        ];
+                    this.placeSet(rowIndex, colIndex, selectedSet);
                 }
-            });
+            }
         });
 
         this.fillEmptyCells();

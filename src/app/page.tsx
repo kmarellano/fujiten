@@ -64,7 +64,6 @@ export default function Home() {
         );
 
         const gridData = gridSolver.generateSolvableGrid();
-
         setGrid(gridData);
     }, []);
 
