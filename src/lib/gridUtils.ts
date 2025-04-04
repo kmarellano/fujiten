@@ -35,16 +35,25 @@ export class GridSolver {
         const isHorizontallyFit = col + set.length <= this.grid[0].length;
         const isVerticallyFit = row + set.length <= this.grid.length;
 
-        if (isHorizontallyFit && this.isSpaceAvailable(row, col, set, true)) {
-            set.forEach((num, i) => {
+        const setToPlace = Math.random() < 0.4 ? set.reverse() : set;
+        if (
+            isHorizontallyFit &&
+            this.isSpaceAvailable(row, col, set, true) &&
+            Math.random() > 0.5
+        ) {
+            setToPlace.forEach((num, i) => {
                 this.grid[row][col + i] = num;
             });
         } else if (
             isVerticallyFit &&
-            this.isSpaceAvailable(row, col, set, false)
+            this.isSpaceAvailable(row, col, setToPlace, false)
         ) {
-            set.forEach((num, i) => {
+            setToPlace.forEach((num, i) => {
                 this.grid[row + i][col] = num;
+            });
+        } else {
+            setToPlace.forEach((num, i) => {
+                this.grid[row][col + i] = num;
             });
         }
     }
@@ -57,6 +66,7 @@ export class GridSolver {
             const canPlaceHorizontally =
                 isHorizontallyFit &&
                 set.every((_, i) => this.grid[row][col + i] === null);
+
             const canPlaceVertically =
                 isVerticallyFit &&
                 set.every(
@@ -100,7 +110,6 @@ export class GridSolver {
         });
 
         this.fillEmptyCells();
-
         return this.grid;
     }
 }
