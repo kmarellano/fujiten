@@ -2,7 +2,7 @@ import { memo, useMemo, forwardRef } from 'react';
 import { AppleIconProps } from '@/types';
 
 const sizeMap = {
-    sm: 75,
+    sm: 70,
     md: 120,
     lg: 180,
     xl: 240,
@@ -22,7 +22,7 @@ const AppleIcon = memo(
                     viewBox="0 0 64 64"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="transition-colors select-none"
+                    className="transition-colors select-none pointer-events-none"
                 >
                     <defs>
                         <linearGradient

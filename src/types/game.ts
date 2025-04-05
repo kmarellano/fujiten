@@ -1,3 +1,4 @@
+export type Grid = (number | null)[][];
 export interface Position {
     x: number;
     y: number;
@@ -14,6 +15,7 @@ export interface SelectedCells {
     sum: number;
 }
 export interface GameState {
+    grid: Grid;
     initialX: number | null;
     initialY: number | null;
     currentX: number | null;
@@ -22,6 +24,7 @@ export interface GameState {
     selectedCells: SelectedCells;
     animatedApples: AnimatedApple[];
     gameMode: GameMode | null;
+    setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
     setCurrentPosition: (x: number, y: number) => void;
     setIsSelecting: (isSelecting: boolean) => void;

@@ -1,5 +1,6 @@
 export type { AppleIconProps } from './apple';
 export type {
+    Grid,
     Position,
     GameState,
     CellMatrix,

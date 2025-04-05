@@ -19,7 +19,7 @@ interface GameModeCardProps {
     isSelected: boolean;
 }
 
-export function GameModeCard({
+function GameModeCard({
     mode,
     config,
     onSelect,
@@ -89,3 +89,5 @@ export function GameModeCard({
         </Card>
     );
 }
+
+export { GameModeCard };

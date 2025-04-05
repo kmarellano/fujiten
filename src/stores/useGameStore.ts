@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { GameState } from '@/types';
 
 export const useGameStore = create<GameState>()((set) => ({
+    grid: [],
     initialX: null,
     initialY: null,
     currentX: null,
@@ -11,6 +12,7 @@ export const useGameStore = create<GameState>()((set) => ({
     animatedApples: [],
     gameMode: null,
 
+    setGrid: (grid) => set(() => ({ grid })),
     setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
     setInitialPosition: (x, y) => set(() => ({ initialX: x, initialY: y })),
     setCurrentPosition: (x, y) => set(() => ({ currentX: x, currentY: y })),
@@ -24,7 +26,7 @@ export const useGameStore = create<GameState>()((set) => ({
                 ),
             },
         })),
-    setAnimatedApples: (apples) => set(() => ({ animatedApples: apples })),
+    setAnimatedApples: (animatedApples) => set(() => ({ animatedApples })),
     updateAnimatedApples: (gravity = 0.8) =>
         set((state) => ({
             animatedApples: state.animatedApples.map((apple) => ({
