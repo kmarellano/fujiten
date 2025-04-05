@@ -28,6 +28,8 @@ export const useGameStore = create<GameState>()((set) => ({
             },
         })),
     setAnimatedApples: (animatedApples) => set(() => ({ animatedApples })),
+    setGameMode: (gameMode) => set(() => ({ gameMode })),
+
     updateAnimatedApples: (gravity = 1.5) =>
         set((state) => ({
             animatedApples: state.animatedApples.map((apple) => ({
@@ -37,7 +39,10 @@ export const useGameStore = create<GameState>()((set) => ({
                 velocityY: apple.velocityY + gravity,
             })),
         })),
-    setGameMode: (gameMode) => set(() => ({ gameMode })),
+    updateScore: () =>
+        set((state) => ({
+            score: state.score + state.selectedCells.numbers.length,
+        })),
 
     deleteSelectedNumbers: () =>
         set((state) => {
@@ -49,6 +54,7 @@ export const useGameStore = create<GameState>()((set) => ({
 
             return { grid: newGrid };
         }),
+    resetScore: () => set(() => ({ score: 0 })),
     resetPositions: () =>
         set(() => ({
             initialX: null,

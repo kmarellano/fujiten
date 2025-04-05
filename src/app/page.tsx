@@ -14,7 +14,14 @@ import {
 import { GameMode } from '@/types';
 
 export default function Fujiten() {
-    const { gameMode, score, setGrid, setGameMode } = useGameStore();
+    const {
+        score,
+        gameMode,
+        setGrid,
+        setGameMode,
+        resetScore,
+        resetPositions,
+    } = useGameStore();
 
     const handleGameStart = (gameMode: GameMode): void => {
         setGameMode(gameMode);
@@ -25,6 +32,9 @@ export default function Fujiten() {
             MAX_NUMBER,
         ).generateSolvableGrid();
         setGrid(gridGenarated);
+
+        resetScore();
+        resetPositions();
     };
 
     return (

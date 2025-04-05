@@ -33,6 +33,7 @@ function GameBoard() {
         setCurrentPosition,
         setSelectedCells,
         setAnimatedApples,
+        updateScore,
         updateAnimatedApples,
         deleteSelectedNumbers,
         resetPositions,
@@ -195,6 +196,7 @@ function GameBoard() {
         if (selectedCells.sum === MAX_NUMBER + 1) {
             createAnimatedApples();
             deleteSelectedNumbers();
+            updateScore();
         }
 
         cancelAnimationFrame(animationRef.current);

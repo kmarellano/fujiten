@@ -25,15 +25,20 @@ export interface GameState {
     animatedApples: AnimatedApple[];
     gameMode: GameMode | null;
     score: number;
+
     setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
     setCurrentPosition: (x: number, y: number) => void;
     setIsSelecting: (isSelecting: boolean) => void;
     setSelectedCells: (selectedCells: Omit<SelectedCells, 'sum'>) => void;
     setAnimatedApples: (animatedApples: AnimatedApple[]) => void;
-    updateAnimatedApples: (gravity?: number) => void;
     setGameMode: (gameMode: GameMode) => void;
+
+    updateAnimatedApples: (gravity?: number) => void;
+    updateScore: () => void;
+
     deleteSelectedNumbers: () => void;
+    resetScore: () => void;
     resetPositions: () => void;
 }
 
