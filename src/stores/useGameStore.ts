@@ -9,6 +9,7 @@ export const useGameStore = create<GameState>()((set) => ({
     isSelecting: false,
     selectedCells: { numbers: [], positions: [], sum: 0 },
     animatedApples: [],
+    gameMode: null,
 
     setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
     setInitialPosition: (x, y) => set(() => ({ initialX: x, initialY: y })),
@@ -33,6 +34,7 @@ export const useGameStore = create<GameState>()((set) => ({
                 velocityY: apple.velocityY + gravity,
             })),
         })),
+    setGameMode: (gameMode) => set(() => ({ gameMode })),
 
     resetPositions: () =>
         set(() => ({

@@ -8,4 +8,6 @@ export type {
     SelectionBoxStyle,
     SelectedPositions,
     AnimatedApple,
+    GameMode,
+    GameModeConfig,
 } from './game';

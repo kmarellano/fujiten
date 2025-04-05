@@ -21,12 +21,14 @@ export interface GameState {
     isSelecting: boolean;
     selectedCells: SelectedCells;
     animatedApples: AnimatedApple[];
+    gameMode: GameMode | null;
     setInitialPosition: (x: number, y: number) => void;
     setCurrentPosition: (x: number, y: number) => void;
     setIsSelecting: (isSelecting: boolean) => void;
     setSelectedCells: (selectedCells: Omit<SelectedCells, 'sum'>) => void;
     setAnimatedApples: (animatedApples: AnimatedApple[]) => void;
     updateAnimatedApples: (gravity?: number) => void;
+    setGameMode: (gameMode: GameMode) => void;
     resetPositions: () => void;
 }
 
@@ -45,4 +47,15 @@ export interface AnimatedApple {
     velocityX: number;
     velocityY: number;
     rotation: number;
+}
+
+export type GameMode = 'zen' | 'time-attack' | 'target-score' | 'cascade';
+export interface GameModeConfig {
+    name: string;
+    description: string;
+    icon: string;
+}
+
+export interface GameModeSelectorProps {
+    onStart: (mode: GameMode) => void;
 }
