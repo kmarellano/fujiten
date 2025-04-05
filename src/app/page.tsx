@@ -94,6 +94,7 @@ export default function Home() {
 
     const handleMouseDown = useCallback(
         (e: React.MouseEvent): void => {
+            resetPositions();
             const position = getCurrentPosition(playgroundRef, e);
             if (!position) return;
 
@@ -101,7 +102,7 @@ export default function Home() {
             setIsSelecting(true);
             setInitialPosition(x, y);
         },
-        [playgroundRef, setIsSelecting, setInitialPosition],
+        [playgroundRef, setIsSelecting, setInitialPosition, resetPositions],
     );
 
     const findNumbersInSelectionBox = useCallback(
@@ -227,14 +228,14 @@ export default function Home() {
     }, [animatedApples.length, updateAnimatedApples]);
 
     const handleMouseUp = useCallback(() => {
-        resetPositions();
-
         if (selectedCells.sum === MAX_NUMBER + 1) {
             createAnimatedApples();
             deleteSelectedNumbers();
         }
 
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = 0;
+        resetPositions();
     }, [
         selectedCells,
         resetPositions,
