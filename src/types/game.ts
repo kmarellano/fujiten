@@ -24,6 +24,7 @@ export interface GameState {
     selectedCells: SelectedCells;
     animatedApples: AnimatedApple[];
     gameMode: GameMode | null;
+    score: number;
     setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
     setCurrentPosition: (x: number, y: number) => void;
@@ -32,6 +33,7 @@ export interface GameState {
     setAnimatedApples: (animatedApples: AnimatedApple[]) => void;
     updateAnimatedApples: (gravity?: number) => void;
     setGameMode: (gameMode: GameMode) => void;
+    deleteSelectedNumbers: () => void;
     resetPositions: () => void;
 }
 

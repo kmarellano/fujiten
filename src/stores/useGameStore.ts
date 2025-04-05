@@ -11,6 +11,7 @@ export const useGameStore = create<GameState>()((set) => ({
     selectedCells: { numbers: [], positions: [], sum: 0 },
     animatedApples: [],
     gameMode: null,
+    score: 0,
 
     setGrid: (grid) => set(() => ({ grid })),
     setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
@@ -27,7 +28,7 @@ export const useGameStore = create<GameState>()((set) => ({
             },
         })),
     setAnimatedApples: (animatedApples) => set(() => ({ animatedApples })),
-    updateAnimatedApples: (gravity = 0.8) =>
+    updateAnimatedApples: (gravity = 1.5) =>
         set((state) => ({
             animatedApples: state.animatedApples.map((apple) => ({
                 ...apple,
@@ -38,6 +39,16 @@ export const useGameStore = create<GameState>()((set) => ({
         })),
     setGameMode: (gameMode) => set(() => ({ gameMode })),
 
+    deleteSelectedNumbers: () =>
+        set((state) => {
+            const newGrid = [...state.grid];
+
+            state.selectedCells.positions.forEach(({ row, col }) => {
+                newGrid[row][col] = null;
+            });
+
+            return { grid: newGrid };
+        }),
     resetPositions: () =>
         set(() => ({
             initialX: null,

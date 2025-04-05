@@ -10,7 +10,7 @@
     --card-foreground: #f9a825;
     --popover: #3c4d73;
     --popover-foreground: #f9a825;
-    --primary: #e63946;
+    --primary: #fd1d30;
     --primary-foreground: #fff;
     --secondary: #00a8cc;
     --secondary-foreground: #fff;
@@ -92,7 +92,7 @@
         @apply bg-background text-foreground;
     }
 
-    button {
+    .arcade-button {
         @apply border-4 border-b-5 border-r-6 border-primary-foreground/30 hover:brightness-120 active:border-t-4 active:border-l-4 active:border-b-4 active:border-r-2 transition-all duration-100 border-r-popover/30 border-b-popover/50 hover:cursor-pointer;
     }
 }

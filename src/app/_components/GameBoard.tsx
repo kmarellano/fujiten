@@ -28,13 +28,13 @@ function GameBoard() {
         isSelecting,
         selectedCells,
         animatedApples,
-        setGrid,
         setIsSelecting,
         setInitialPosition,
         setCurrentPosition,
         setSelectedCells,
         setAnimatedApples,
         updateAnimatedApples,
+        deleteSelectedNumbers,
         resetPositions,
     } = useGameStore();
 
@@ -57,16 +57,6 @@ function GameBoard() {
 
         return { x, y };
     };
-
-    const deleteSelectedNumbers = useCallback(() => {
-        const newGrid = [...grid];
-
-        selectedCells.positions.forEach(({ row, col }) => {
-            newGrid[row][col] = null;
-        });
-
-        setGrid(newGrid);
-    }, [selectedCells, grid, setGrid]);
 
     const handleMouseDown = useCallback(
         (e: React.MouseEvent): void => {
@@ -190,7 +180,7 @@ function GameBoard() {
         if (animatedApples.length === 0) return;
 
         let rafId: number;
-        const gravity = 0.8;
+        const gravity = 2;
 
         const animate = () => {
             updateAnimatedApples(gravity);
@@ -268,12 +258,9 @@ function GameBoard() {
         isSelecting && initialX && initialY && currentX && currentY;
 
     return (
-        <section
-            id="game-board"
-            className="min-h-screen flex items-center justify-center"
-        >
+        <section id="game-board">
             <div
-                className="grid grid-cols-15 grid-rows-10 mb-6 p-12 border-2 border-accent-foreground w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
+                className="grid grid-cols-15 grid-rows-10 mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}

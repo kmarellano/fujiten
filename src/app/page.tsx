@@ -11,11 +11,10 @@ import {
     GRID_ROW,
     MAX_NUMBER,
 } from '@/config/gridConstants';
-
 import { GameMode } from '@/types';
 
-export default function Home() {
-    const { gameMode, setGrid, setGameMode } = useGameStore();
+export default function Fujiten() {
+    const { gameMode, score, setGrid, setGameMode } = useGameStore();
 
     const handleGameStart = (gameMode: GameMode): void => {
         setGameMode(gameMode);
@@ -29,9 +28,42 @@ export default function Home() {
     };
 
     return (
-        <main className="mx-auto">
+        <main>
             {gameMode ? (
-                <GameBoard />
+                <div className="min-h-screen flex flex-row justify-evenly">
+                    <section id="scoring" className="place-items-center">
+                        <div className="justify-self-start h-fit w-full text-center">
+                            <div className="mx-4 mt-4">
+                                <h3 className="font-bold text-3xl text-accent">
+                                    SCORE
+                                </h3>
+                                <p className="text-2xl">{score}</p>
+                            </div>
+                        </div>
+                        <GameBoard />
+                    </section>
+
+                    <div className="h-full border mt-4">
+                        <div>
+                            <h3 className="font-bold text-2xl text-accent">
+                                TIMER
+                            </h3>
+                            <p className="text-xl">60</p>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-2xl text-destructive">
+                                RESET GAME
+                            </h3>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-2xl text-sidebar-foreground">
+                                GAME MODES
+                            </h3>
+                        </div>
+                    </div>
+                </div>
             ) : (
                 <GameModeSelector onStart={handleGameStart} />
             )}

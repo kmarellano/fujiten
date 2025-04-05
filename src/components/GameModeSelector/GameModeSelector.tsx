@@ -33,7 +33,7 @@ function GameModeSelector({ onStart }: GameModeSelectorProps) {
                         SELECT GAME MODE
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {(Object.keys(gameModes) as GameMode[]).map((mode) => (
                             <GameModeCard
                                 key={mode}
@@ -46,11 +46,11 @@ function GameModeSelector({ onStart }: GameModeSelectorProps) {
                     </div>
 
                     <Button
-                        className="w-full mt-6 py-6 text-base sm:text-lg bg-primary hover:bg-primary/90"
+                        className="w-full mt-6 py-6 text-base sm:text-lg bg-primary hover:bg-primary/90 arcade-button"
                         onClick={() => onStart(selectedMode)}
                     >
-                        <PlayIcon className="mr-2 h-5 w-5" fill="white" /> START
-                        GAME
+                        <PlayIcon className="mr-2 h-5 w-5" fill="white" />
+                        START GAME
                     </Button>
                 </div>
             </div>
