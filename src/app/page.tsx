@@ -78,7 +78,9 @@ export default function Fujiten() {
     const handleGameReset = (): void => {
         resetScore();
         resetPositions();
-        handleResetTimer(true);
+
+        const isTimeAttack = gameMode === 'time-attack';
+        handleResetTimer(isTimeAttack);
 
         const gridGenarated = generateGrid();
         setGrid(gridGenarated);
