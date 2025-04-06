@@ -5,7 +5,7 @@ import { useGameStore } from '@/stores';
 import { AppleIcon } from '@/components/AppleIcon';
 
 import { cn } from '@/lib/utils';
-import { MAX_NUMBER } from '@/config/gridConstants';
+import { GRID_COL, GRID_ROW, MAX_NUMBER } from '@/config/gridConstants';
 
 import type React from 'react';
 import type {
@@ -263,12 +263,16 @@ function GameBoard() {
     return (
         <section id="game-board">
             <div
-                className="grid grid-cols-15 grid-rows-10 mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
+                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
                 ref={playgroundRef}
+                style={{
+                    gridTemplateColumns: `repeat(${GRID_COL}, minmax(0, 1fr))`,
+                    gridTemplateRows: `repeat(${GRID_ROW}, minmax(0, 1fr))`,
+                }}
             >
                 <Fragment>
                     {grid.map((row, rowIndex) => {

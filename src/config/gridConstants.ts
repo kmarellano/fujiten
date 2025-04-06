@@ -1,5 +1,5 @@
-export const GRID_COL = 15;
 export const GRID_ROW = 10;
+export const GRID_COL = 15;
 export const MAX_NUMBER = 9;
 
 export const validSets = [

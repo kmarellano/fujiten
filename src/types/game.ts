@@ -25,6 +25,7 @@ export interface GameState {
     animatedApples: AnimatedApple[];
     gameMode: GameMode | null;
     score: number;
+    isGameOver: boolean;
 
     setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
@@ -33,6 +34,7 @@ export interface GameState {
     setSelectedCells: (selectedCells: Omit<SelectedCells, 'sum'>) => void;
     setAnimatedApples: (animatedApples: AnimatedApple[]) => void;
     setGameMode: (gameMode: GameMode) => void;
+    setIsGameOver: (isGameOver: boolean) => void;
 
     updateAnimatedApples: (gravity?: number) => void;
     updateScore: () => void;

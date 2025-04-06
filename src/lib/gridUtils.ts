@@ -1,3 +1,30 @@
+import { MAX_NUMBER } from '@/config/gridConstants';
+
+const getNumbersInBox = (
+    grid: (number | null)[][],
+    startRow: number,
+    startCol: number,
+    height: number,
+    width: number,
+): number[] => {
+    const numbers: number[] = [];
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            const num = grid[startRow + i][startCol + j];
+            if (num !== null) {
+                numbers.push(num);
+            }
+        }
+    }
+
+    return numbers;
+};
+
+const hasReachedTargetNumber = (numbers: number[], target: number): boolean => {
+    const total = numbers.reduce((sum, num) => sum + num, 0);
+    return total === target;
+};
+
 export class GridSolver {
     private grid: (number | null)[][];
     private validSets: number[][];
@@ -54,10 +81,6 @@ export class GridSolver {
         ) {
             setToPlace.forEach((num, i) => {
                 this.grid[row + i][col] = num;
-            });
-        } else {
-            setToPlace.forEach((num, i) => {
-                this.grid[row][col + i] = num;
             });
         }
     }
@@ -118,5 +141,43 @@ export class GridSolver {
 
         this.fillEmptyCells();
         return this.grid;
+    }
+
+    public static hasPossibleSums(grid: (number | null)[][]): boolean {
+        const rows = grid.length;
+        const cols = grid[0].length;
+
+        for (let boxHeight = 1; boxHeight <= rows; boxHeight++) {
+            for (let boxWidth = 1; boxWidth <= cols; boxWidth++) {
+                for (
+                    let startRow = 0;
+                    startRow <= rows - boxHeight;
+                    startRow++
+                ) {
+                    for (
+                        let startCol = 0;
+                        startCol <= cols - boxWidth;
+                        startCol++
+                    ) {
+                        const numbers = getNumbersInBox(
+                            grid,
+                            startRow,
+                            startCol,
+                            boxHeight,
+                            boxWidth,
+                        );
+
+                        if (
+                            numbers.length >= 2 &&
+                            hasReachedTargetNumber(numbers, MAX_NUMBER + 1)
+                        ) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -1,9 +1,10 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { GameLabel } from '@/components/GameLabel';
 import { GameBoard } from './_components/GameBoard';
+import { GameOverModal } from './_components/GameOverModal';
 import { GameModeSelector } from '@/components/GameModeSelector';
 
 import { useGameStore } from '@/stores';
@@ -17,15 +18,17 @@ import {
     MAX_NUMBER,
 } from '@/config/gridConstants';
 import { timeAttackTimer } from '@/config/gameConstants';
-
 import { GameMode } from '@/types';
 
 export default function Fujiten() {
     const {
+        grid,
         score,
         gameMode,
+        isGameOver,
         setGrid,
         setGameMode,
+        setIsGameOver,
         resetGame,
         resetScore,
         resetPositions,
@@ -38,8 +41,10 @@ export default function Fujiten() {
     } = useTimer({
         expiryTimestamp: generateDateInSeconds(timeAttackTimer),
         autoStart: false,
-        onExpire: () => alert('onExpire called'),
+        onExpire: () => handleTimeExpiry,
     });
+
+    const handleTimeExpiry = useCallback(() => {}, []);
 
     const generateGrid = useCallback(() => {
         return new GridSolver(
@@ -78,6 +83,7 @@ export default function Fujiten() {
     const handleGameReset = (): void => {
         resetScore();
         resetPositions();
+        setIsGameOver(false);
 
         const isTimeAttack = gameMode === 'time-attack';
         handleResetTimer(isTimeAttack);
@@ -86,8 +92,20 @@ export default function Fujiten() {
         setGrid(gridGenarated);
     };
 
+    const isTA = gameMode === 'time-attack';
+    const isZEN = gameMode === 'zen';
+
+    useEffect(() => {
+        if (isZEN && grid.length > 0) {
+            const hasMoves = GridSolver.hasPossibleSums(grid);
+            if (!hasMoves) {
+                setIsGameOver(true);
+            }
+        }
+    }, [grid, isZEN, setIsGameOver]);
+
     return (
-        <main>
+        <main className="min-h-screen max-h-screen">
             {gameMode ? (
                 <div className="flex flex-row justify-evenly">
                     <section
@@ -108,10 +126,10 @@ export default function Fujiten() {
                     <div
                         className={cn(
                             'my-8 flex flex-col justify-between items-center space-y-4',
-                            { 'justify-end': gameMode === 'zen' },
+                            { 'justify-end': isZEN },
                         )}
                     >
-                        {gameMode === 'time-attack' && (
+                        {isTA && (
                             <GameLabel
                                 header="TIMER"
                                 description={
@@ -141,6 +159,15 @@ export default function Fujiten() {
                 </div>
             ) : (
                 <GameModeSelector onStart={handleGameStart} />
+            )}
+            {gameMode && (
+                <GameOverModal
+                    score={score}
+                    isOpen={isGameOver}
+                    gameMode={gameMode}
+                    onChangeMode={handleGameMode}
+                    onRestart={handleGameReset}
+                />
             )}
         </main>
     );

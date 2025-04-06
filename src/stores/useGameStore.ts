@@ -12,6 +12,7 @@ export const useGameStore = create<GameState>()((set) => ({
     animatedApples: [],
     gameMode: null,
     score: 0,
+    isGameOver: true,
 
     setGrid: (grid) => set(() => ({ grid })),
     setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
@@ -28,7 +29,8 @@ export const useGameStore = create<GameState>()((set) => ({
             },
         })),
     setAnimatedApples: (animatedApples) => set(() => ({ animatedApples })),
-    setGameMode: (gameMode) => set(() => ({ gameMode })),
+    setGameMode: (gameMode) => set(() => ({ gameMode, isGameOver: false })),
+    setIsGameOver: (isGameOver) => set(() => ({ isGameOver })),
 
     updateAnimatedApples: (gravity = 1.5) =>
         set((state) => ({
@@ -68,5 +70,6 @@ export const useGameStore = create<GameState>()((set) => ({
         set(() => ({
             score: 0,
             gameMode: null,
+            isGameOver: true,
         })),
 }));
