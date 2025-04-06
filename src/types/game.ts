@@ -38,6 +38,7 @@ export interface GameState {
     updateScore: () => void;
 
     deleteSelectedNumbers: () => void;
+    resetGame: () => void;
     resetScore: () => void;
     resetPositions: () => void;
 }

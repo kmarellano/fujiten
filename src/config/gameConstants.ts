@@ -26,3 +26,5 @@ export const gameModes: Record<GameMode, GameModeConfig> = {
         icon: 'arrow-down-up',
     },
 };
+
+export const timeAttackTimer = 5;

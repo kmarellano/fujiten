@@ -64,4 +64,9 @@ export const useGameStore = create<GameState>()((set) => ({
             isSelecting: false,
             selectedCells: { numbers: [], positions: [], sum: 0 },
         })),
+    resetGame: () =>
+        set(() => ({
+            score: 0,
+            gameMode: null,
+        })),
 }));

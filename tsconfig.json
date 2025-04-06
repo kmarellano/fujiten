@@ -23,6 +23,7 @@
             "@/lib/*": ["./src/lib/*"],
             "@/types": ["./src/types"],
             "@/stores": ["./src/stores"],
+            "@/hooks/*": ["./src/hooks/*"],
             "@/config/*": ["./src/config/*"],
             "@/assets/*": ["./src/assets/*"],
             "@/styles/*": ["./src/styles/*"],

@@ -204,6 +204,7 @@ function GameBoard() {
         resetPositions();
     }, [
         selectedCells,
+        updateScore,
         resetPositions,
         createAnimatedApples,
         deleteSelectedNumbers,
