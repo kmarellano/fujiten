@@ -67,7 +67,7 @@ export interface AnimatedApple {
     rotation: number;
 }
 
-export type GameMode = 'zen' | 'time-attack' | 'target-score' | 'cascade';
+export type GameMode = 'zen' | 'time-attack' | 'multiplier' | 'cascade';
 export interface GameModeConfig {
     name: string;
     description: string;

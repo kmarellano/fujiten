@@ -6,7 +6,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import type { GameMode, GameModeConfig } from '@/types';
-import { Clock, Infinity, Target, ArrowDownUp } from 'lucide-react';
+import { ClockAlert, Infinity, Zap, BrickWall } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
@@ -32,15 +32,13 @@ function GameModeCard({
                 );
             case 'time-attack':
                 return (
-                    <Clock className="h-8 w-8 text-highlight animate-pulse" />
+                    <ClockAlert className="h-8 w-8 text-highlight animate-pulse" />
                 );
-            case 'target-score':
-                return (
-                    <Target className="h-8 w-8 text-secondary animate-pulse" />
-                );
+            case 'multiplier':
+                return <Zap className="h-8 w-8 text-secondary animate-pulse" />;
             case 'cascade':
                 return (
-                    <ArrowDownUp className="h-8 w-8 text-accent animate-pulse" />
+                    <BrickWall className="h-8 w-8 text-accent animate-pulse" />
                 );
             default:
                 return null;

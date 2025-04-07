@@ -40,9 +40,8 @@ export function GameOverModal({
 
         switch (gameMode) {
             case 'time-attack':
+            case 'multiplier':
                 return "TIME'S UP! YOUR SCORE:";
-            case 'target-score':
-                return 'OUT OF MOVES! FINAL SCORE:';
             default:
                 return 'YOUR FINAL SCORE:';
         }

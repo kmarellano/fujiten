@@ -13,10 +13,10 @@ export const gameModes: Record<GameMode, GameModeConfig> = {
             'Play at your own pace with no time limit. Relax and enjoy the game!',
         icon: 'infinity',
     },
-    'target-score': {
-        name: 'TARGET SCORE',
+    multiplier: {
+        name: 'MULTIPLIER MODE',
         description:
-            'Reach the target score with limited moves. Plan your selections carefully!',
+            'Build up combos with fast consecutive matches to multiply your score!',
         icon: 'target',
     },
     cascade: {
