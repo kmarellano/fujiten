@@ -5,6 +5,7 @@ import { useGameStore } from '@/stores';
 import { AppleIcon } from '@/components/AppleIcon';
 
 import { cn } from '@/lib/utils';
+import { REFILL_ON_COUNT } from '@/src/config/gameConstants';
 import { GRID_COL, GRID_ROW, MAX_NUMBER } from '@/config/gridConstants';
 
 import type React from 'react';
@@ -21,6 +22,7 @@ import type {
 function GameBoard() {
     const {
         grid,
+        gameMode,
         initialX,
         initialY,
         currentX,
@@ -39,6 +41,7 @@ function GameBoard() {
         resetPositions,
     } = useGameStore();
 
+    const isCASCADE = gameMode === 'cascade';
     const animationRef = useRef<number>(0);
     const lastUpdateRef = useRef<number>(0);
     const playgroundRef = useRef<HTMLDivElement>(null);
@@ -195,7 +198,7 @@ function GameBoard() {
     const handleMouseUp = useCallback(() => {
         if (selectedCells.sum === MAX_NUMBER + 1) {
             createAnimatedApples();
-            deleteSelectedNumbers();
+            deleteSelectedNumbers(isCASCADE, REFILL_ON_COUNT);
             updateScore();
         }
 
@@ -203,6 +206,7 @@ function GameBoard() {
         animationRef.current = 0;
         resetPositions();
     }, [
+        isCASCADE,
         selectedCells,
         updateScore,
         resetPositions,

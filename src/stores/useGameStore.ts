@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { GameState } from '@/types';
+import { MAX_NUMBER } from '@/config/gridConstants';
 
 export const useGameStore = create<GameState>()((set) => ({
     grid: [],
@@ -13,6 +14,8 @@ export const useGameStore = create<GameState>()((set) => ({
     gameMode: null,
     score: 0,
     isGameOver: true,
+    deletionCount: 0,
+    recentlyRemovedCells: [],
 
     setGrid: (grid) => set(() => ({ grid })),
     setIsSelecting: (isSelecting) => set(() => ({ isSelecting })),
@@ -46,16 +49,34 @@ export const useGameStore = create<GameState>()((set) => ({
             score: state.score + state.selectedCells.numbers.length,
         })),
 
-    deleteSelectedNumbers: () =>
+    deleteSelectedNumbers: (shouldRefill = false, refillOnCount = 1) =>
         set((state) => {
             const newGrid = [...state.grid];
 
-            state.selectedCells.positions.forEach(({ row, col }) => {
+            const currentPositions = state.selectedCells.positions;
+            currentPositions.forEach(({ row, col }) => {
                 newGrid[row][col] = null;
             });
 
-            return { grid: newGrid };
+            const shouldUpdate =
+                shouldRefill && state.deletionCount % refillOnCount === 0;
+
+            if (shouldUpdate) {
+                state.recentlyRemovedCells.forEach(({ row, col }) => {
+                    newGrid[row][col] =
+                        Math.floor(Math.random() * MAX_NUMBER) + 1;
+                });
+            }
+
+            return {
+                grid: newGrid,
+                deletionCount: state.deletionCount + 1,
+                recentlyRemovedCells: shouldUpdate
+                    ? currentPositions
+                    : state.recentlyRemovedCells,
+            };
         }),
+
     resetScore: () => set(() => ({ score: 0 })),
     resetPositions: () =>
         set(() => ({
@@ -68,8 +89,11 @@ export const useGameStore = create<GameState>()((set) => ({
         })),
     resetGame: () =>
         set(() => ({
+            grid: [],
             score: 0,
             gameMode: null,
             isGameOver: true,
+            deletionCount: 0,
+            recentlyRemovedPositions: [],
         })),
 }));

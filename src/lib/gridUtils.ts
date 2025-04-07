@@ -1,7 +1,8 @@
+import { Grid, SelectedPositions } from '@/types';
 import { MAX_NUMBER } from '@/config/gridConstants';
 
 const getNumbersInBox = (
-    grid: (number | null)[][],
+    grid: Grid,
     startRow: number,
     startCol: number,
     height: number,
@@ -26,7 +27,7 @@ const hasReachedTargetNumber = (numbers: number[], target: number): boolean => {
 };
 
 export class GridSolver {
-    private grid: (number | null)[][];
+    private grid: Grid;
     private validSets: number[][];
     private maxNumber: number;
     private gridVariance: number;
@@ -116,7 +117,7 @@ export class GridSolver {
         });
     }
 
-    public generateSolvableGrid(): (number | null)[][] {
+    public generateSolvableGrid(): Grid {
         const positions = this.grid
             .flatMap((row, rowIndex) =>
                 row.map((_, colIndex) => [rowIndex, colIndex]),
@@ -143,7 +144,7 @@ export class GridSolver {
         return this.grid;
     }
 
-    public static hasPossibleSums(grid: (number | null)[][]): boolean {
+    public static hasPossibleSums(grid: Grid): boolean {
         const rows = grid.length;
         const cols = grid[0].length;
 

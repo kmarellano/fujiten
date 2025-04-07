@@ -27,4 +27,5 @@ export const gameModes: Record<GameMode, GameModeConfig> = {
     },
 };
 
-export const timeAttackTimer = 5;
+export const TA_TIMER = 60;
+export const REFILL_ON_COUNT = 2;

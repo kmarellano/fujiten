@@ -26,6 +26,8 @@ export interface GameState {
     gameMode: GameMode | null;
     score: number;
     isGameOver: boolean;
+    deletionCount: number;
+    recentlyRemovedCells: SelectedPositions;
 
     setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
@@ -39,7 +41,10 @@ export interface GameState {
     updateAnimatedApples: (gravity?: number) => void;
     updateScore: () => void;
 
-    deleteSelectedNumbers: () => void;
+    deleteSelectedNumbers: (
+        shouldRefill?: boolean,
+        refillOnCount?: number,
+    ) => void;
     resetGame: () => void;
     resetScore: () => void;
     resetPositions: () => void;

@@ -17,7 +17,7 @@ import {
     GRID_ROW,
     MAX_NUMBER,
 } from '@/config/gridConstants';
-import { timeAttackTimer } from '@/config/gameConstants';
+import { TA_TIMER } from '@/config/gameConstants';
 import { GameMode } from '@/types';
 
 export default function Fujiten() {
@@ -34,12 +34,16 @@ export default function Fujiten() {
         resetPositions,
     } = useGameStore();
 
+    const isZEN = gameMode === 'zen';
+    const isTA = gameMode === 'time-attack';
+    const isCASCADE = gameMode === 'cascade';
+
     const {
         totalSeconds: timeLeft,
         start: startTimer,
         restart: restartTimer,
     } = useTimer({
-        expiryTimestamp: generateDateInSeconds(timeAttackTimer),
+        expiryTimestamp: generateDateInSeconds(TA_TIMER),
         autoStart: false,
         onExpire: () => handleTimeExpiry,
     });
@@ -57,7 +61,7 @@ export default function Fujiten() {
 
     const handleResetTimer = useCallback(
         (autoStart: boolean = false) => {
-            const newTimer = generateDateInSeconds(timeAttackTimer);
+            const newTimer = generateDateInSeconds(TA_TIMER);
             restartTimer(newTimer, autoStart);
         },
         [restartTimer],
@@ -92,9 +96,6 @@ export default function Fujiten() {
         setGrid(gridGenarated);
     };
 
-    const isTA = gameMode === 'time-attack';
-    const isZEN = gameMode === 'zen';
-
     useEffect(() => {
         if (isZEN && grid.length > 0) {
             const hasMoves = GridSolver.hasPossibleSums(grid);
@@ -103,6 +104,12 @@ export default function Fujiten() {
             }
         }
     }, [grid, isZEN, setIsGameOver]);
+
+    useEffect(() => {
+        if (isTA && grid.length > 0 && timeLeft <= 0) {
+            setIsGameOver(true);
+        }
+    }, [grid, , timeLeft, isTA, setIsGameOver]);
 
     return (
         <main className="min-h-screen max-h-screen">
@@ -126,7 +133,7 @@ export default function Fujiten() {
                     <div
                         className={cn(
                             'my-8 flex flex-col justify-between items-center space-y-4',
-                            { 'justify-end': isZEN },
+                            { 'justify-end': isZEN || isCASCADE },
                         )}
                     >
                         {isTA && (
@@ -160,6 +167,7 @@ export default function Fujiten() {
             ) : (
                 <GameModeSelector onStart={handleGameStart} />
             )}
+
             {gameMode && (
                 <GameOverModal
                     score={score}
