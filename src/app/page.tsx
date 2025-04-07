@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { GameLabel } from '@/components/GameLabel';
 import { GameBoard } from './_components/GameBoard';
 import { GameOverModal } from './_components/GameOverModal';
 import { GameModeSelector } from '@/components/GameModeSelector';
+import { Zap } from 'lucide-react';
 
 import { useGameStore } from '@/stores';
 import { useTimer } from 'react-timer-hook';
@@ -17,7 +19,7 @@ import {
     GRID_ROW,
     MAX_NUMBER,
 } from '@/config/gridConstants';
-import { TA_TIMER } from '@/config/gameConstants';
+import { TA_TIMER, MULTIPLIER_COMBO_TIMER } from '@/config/gameConstants';
 import { GameMode } from '@/types';
 
 export default function Fujiten() {
@@ -26,17 +28,21 @@ export default function Fujiten() {
         score,
         gameMode,
         isGameOver,
+        maxCombo,
+        currentCombo,
+        scoreMultiplier,
         setGrid,
         setGameMode,
         setIsGameOver,
         resetGame,
         resetScore,
         resetPositions,
+        resetComboMultiplier,
     } = useGameStore();
 
     const isZEN = gameMode === 'zen';
     const isTA = gameMode === 'time-attack';
-    const isCASCADE = gameMode === 'cascade';
+    const isMULTIPLIER = gameMode === 'multiplier';
 
     const {
         totalSeconds: timeLeft,
@@ -45,6 +51,16 @@ export default function Fujiten() {
     } = useTimer({
         expiryTimestamp: generateDateInSeconds(TA_TIMER),
         autoStart: false,
+    });
+
+    const {
+        totalSeconds: comboTimeLeft,
+        start: startComboTimer,
+        restart: restartComboTimer,
+    } = useTimer({
+        expiryTimestamp: generateDateInSeconds(MULTIPLIER_COMBO_TIMER),
+        autoStart: false,
+        onExpire: resetComboMultiplier,
     });
 
     const generateGrid = useCallback(() => {
@@ -70,6 +86,10 @@ export default function Fujiten() {
 
         if (gameMode === 'time-attack') {
             startTimer();
+        }
+
+        if (gameMode === 'multiplier') {
+            startComboTimer();
         }
         resetScore();
         resetPositions();
@@ -108,40 +128,85 @@ export default function Fujiten() {
         }
     }, [grid, timeLeft, isTA, setIsGameOver]);
 
+    const handleResetComboTimer = useCallback(() => {
+        return restartComboTimer(
+            generateDateInSeconds(MULTIPLIER_COMBO_TIMER),
+            true,
+        );
+    }, [restartComboTimer]);
+
     return (
         <main className="min-h-screen max-h-screen">
             {gameMode ? (
-                <div className="flex flex-row justify-evenly">
-                    <section
-                        id="scoring"
-                        className="place-items-center flex flex-col"
-                    >
-                        <div className="justify-self-start h-fit w-full text-center">
-                            <GameLabel
-                                className="mx-4 mt-8"
-                                header="SCORE"
-                                headerClassName="text-primary"
-                                description={score}
-                            />
+                <div className="parent grid grid-cols-6 grid-rows-7 gap-0 min-h-screen min-w-full max-h-screen">
+                    <div className="col-span-5 row-span-1 col-start-1 row-start-1 flex items-center justify-center">
+                        <section
+                            id="scoring"
+                            className="place-items-center flex flex-col col-span-8"
+                        >
+                            <div
+                                className={cn(
+                                    'justify-self-start h-fit w-full text-center',
+                                    {
+                                        'grid grid-cols-3': isMULTIPLIER,
+                                    },
+                                )}
+                            >
+                                {isMULTIPLIER && (
+                                    <div className="flex justify-start">
+                                        <GameLabel
+                                            header="COMBO"
+                                            headerClassName="text-secondary"
+                                            description={currentCombo}
+                                            className="mx-4 mt-8"
+                                        />
+                                    </div>
+                                )}
+
+                                <GameLabel
+                                    className="mx-4 mt-8"
+                                    header="SCORE"
+                                    headerClassName="text-primary"
+                                    description={score}
+                                />
+
+                                {isMULTIPLIER && (
+                                    <div className="flex justify-end">
+                                        <GameLabel
+                                            header="MULTIPLIER"
+                                            description={`${scoreMultiplier}X`}
+                                            headerClassName="text-purple-500"
+                                            className="mx-4 mt-8 text-white"
+                                            Icon={Zap}
+                                            iconClassName={
+                                                currentCombo <= 2
+                                                    ? 'text-secondary animate-pulse fill-secondary/80'
+                                                    : 'text-primary fill-primary/80 animate-pulse'
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    </div>
+
+                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center items-center relative">
+                        <div className="absolute right-0 top-0 h-full flex items-center">
+                            <div className="h-full w-3 py-12">
+                                <Progress
+                                    max={TA_TIMER}
+                                    value={timeLeft}
+                                    className="h-full rotate-180"
+                                />
+                            </div>
                         </div>
-                        <GameBoard />
-                    </section>
+                        <GameBoard
+                            hasOnGoingCombo={comboTimeLeft > 0}
+                            restartComboTimer={handleResetComboTimer}
+                        />
+                    </div>
 
-                    <div
-                        className={cn(
-                            'my-8 flex flex-col justify-between items-center space-y-4',
-                            { 'justify-end': isZEN || isCASCADE },
-                        )}
-                    >
-                        {isTA && (
-                            <GameLabel
-                                header="TIMER"
-                                description={
-                                    timeLeft > 0 ? timeLeft - 1 : timeLeft
-                                }
-                            />
-                        )}
-
+                    <div className="col-span-1 row-span-7 col-start-6 row-start-1 flex items-end justify-center">
                         <div className="flex flex-col gap-12 mb-10">
                             <Button
                                 onClick={handleGameMode}
@@ -168,6 +233,7 @@ export default function Fujiten() {
             {gameMode && (
                 <GameOverModal
                     score={score}
+                    maxCombo={maxCombo}
                     isOpen={isGameOver}
                     gameMode={gameMode}
                     onChangeMode={handleGameMode}

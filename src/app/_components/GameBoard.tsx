@@ -19,7 +19,12 @@ import type {
     AnimatedApple,
 } from '@/types';
 
-function GameBoard() {
+interface GameBoardProps {
+    hasOnGoingCombo?: boolean;
+    restartComboTimer?: () => void;
+}
+
+function GameBoard({ hasOnGoingCombo, restartComboTimer }: GameBoardProps) {
     const {
         grid,
         gameMode,
@@ -199,19 +204,25 @@ function GameBoard() {
         if (selectedCells.sum === MAX_NUMBER + 1) {
             createAnimatedApples();
             deleteSelectedNumbers(isCASCADE, REFILL_ON_COUNT);
-            updateScore();
+
+            const keepCombo = gameMode === 'multiplier' && !!hasOnGoingCombo;
+            restartComboTimer?.();
+            updateScore(keepCombo);
         }
 
         cancelAnimationFrame(animationRef.current);
         animationRef.current = 0;
         resetPositions();
     }, [
+        gameMode,
         isCASCADE,
         selectedCells,
+        hasOnGoingCombo,
         updateScore,
         resetPositions,
         createAnimatedApples,
         deleteSelectedNumbers,
+        restartComboTimer,
     ]);
 
     useEffect(() => {
@@ -230,18 +241,14 @@ function GameBoard() {
         )
             return null;
 
-        const gridRect = playgroundRef.current.getBoundingClientRect();
-        const scrollLeft = window.scrollX;
-        const scrollTop = window.scrollY;
-
         const left = Math.min(initialX, currentX);
         const top = Math.min(initialY, currentY);
         const width = Math.abs(currentX - initialX);
         const height = Math.abs(currentY - initialY);
 
         return {
-            left: left + gridRect.left - scrollLeft,
-            top: top + gridRect.top - scrollTop,
+            left: left,
+            top: top,
             width,
             height,
         };
@@ -265,7 +272,7 @@ function GameBoard() {
         isSelecting && initialX && initialY && currentX && currentY;
 
     return (
-        <section id="game-board">
+        <section id="game-board" className="relative">
             <div
                 className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
                 onMouseDown={handleMouseDown}

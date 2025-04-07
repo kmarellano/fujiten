@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@/lib/utils';
 
 interface GameLabel {
@@ -7,6 +7,8 @@ interface GameLabel {
     headerClassName?: string;
     descriptionClassName?: string;
     className?: string;
+    Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>> | null;
+    iconClassName?: string;
 }
 
 function GameLabel({
@@ -15,6 +17,8 @@ function GameLabel({
     headerClassName,
     descriptionClassName,
     className,
+    Icon = null,
+    iconClassName,
 }: GameLabel) {
     return (
         <div className={cn('text-center', className)}>
@@ -26,8 +30,16 @@ function GameLabel({
             >
                 {header}
             </h3>
-            <p className={cn('text-2xl', descriptionClassName)}>
+            <p
+                className={cn(
+                    'inline-flex items-center text-2xl',
+                    descriptionClassName,
+                )}
+            >
                 {description}
+                {Icon && (
+                    <Icon className={cn('h-auto w-auto', iconClassName)} />
+                )}
             </p>
         </div>
     );

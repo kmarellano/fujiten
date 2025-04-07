@@ -28,6 +28,9 @@ export interface GameState {
     isGameOver: boolean;
     deletionCount: number;
     recentlyRemovedCells: SelectedPositions;
+    maxCombo: number;
+    currentCombo: number;
+    scoreMultiplier: number;
 
     setGrid: (grid: Grid) => void;
     setInitialPosition: (x: number, y: number) => void;
@@ -39,15 +42,17 @@ export interface GameState {
     setIsGameOver: (isGameOver: boolean) => void;
 
     updateAnimatedApples: (gravity?: number) => void;
-    updateScore: () => void;
+    updateScore: (isCombo: boolean) => void;
 
     deleteSelectedNumbers: (
         shouldRefill?: boolean,
         refillOnCount?: number,
+        isCombo?: boolean,
     ) => void;
     resetGame: () => void;
     resetScore: () => void;
     resetPositions: () => void;
+    resetComboMultiplier: () => void;
 }
 
 export interface SelectionBoxStyle {
