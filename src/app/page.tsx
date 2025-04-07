@@ -45,10 +45,7 @@ export default function Fujiten() {
     } = useTimer({
         expiryTimestamp: generateDateInSeconds(TA_TIMER),
         autoStart: false,
-        onExpire: () => handleTimeExpiry,
     });
-
-    const handleTimeExpiry = useCallback(() => {}, []);
 
     const generateGrid = useCallback(() => {
         return new GridSolver(
@@ -109,7 +106,7 @@ export default function Fujiten() {
         if (isTA && grid.length > 0 && timeLeft <= 0) {
             setIsGameOver(true);
         }
-    }, [grid, , timeLeft, isTA, setIsGameOver]);
+    }, [grid, timeLeft, isTA, setIsGameOver]);
 
     return (
         <main className="min-h-screen max-h-screen">
