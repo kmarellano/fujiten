@@ -293,7 +293,7 @@ function GameBoard({
     return (
         <section id="game-board" className="relative min-h-fit max-h-fit">
             <div
-                className="grid mb-6 p-12 w-fit max-h-fit h-auto select-none"
+                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] max-h-fit h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
