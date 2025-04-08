@@ -3,9 +3,14 @@
 import { useEffect, useCallback, useRef, useMemo, Fragment } from 'react';
 import { useGameStore } from '@/stores';
 import { AppleIcon } from '@/components/AppleIcon';
+import { Progress } from '@/components/ui/progress';
 
 import { cn } from '@/lib/utils';
-import { REFILL_ON_COUNT } from '@/src/config/gameConstants';
+import {
+    REFILL_ON_COUNT,
+    TA_TIMER,
+    MULTIPLIER_COMBO_TIMER,
+} from '@/src/config/gameConstants';
 import { GRID_COL, GRID_ROW, MAX_NUMBER } from '@/config/gridConstants';
 
 import type React from 'react';
@@ -18,13 +23,21 @@ import type {
     SelectedPositions,
     AnimatedApple,
 } from '@/types';
+import { Timer, Zap } from 'lucide-react';
 
 interface GameBoardProps {
     hasOnGoingCombo?: boolean;
     restartComboTimer?: () => void;
+    gameTimer: number;
+    comboTimer: number;
 }
 
-function GameBoard({ hasOnGoingCombo, restartComboTimer }: GameBoardProps) {
+function GameBoard({
+    gameTimer,
+    comboTimer,
+    hasOnGoingCombo,
+    restartComboTimer,
+}: GameBoardProps) {
     const {
         grid,
         gameMode,
@@ -47,6 +60,12 @@ function GameBoard({ hasOnGoingCombo, restartComboTimer }: GameBoardProps) {
     } = useGameStore();
 
     const isCASCADE = gameMode === 'cascade';
+    const isMULTIPLIER = gameMode === 'multiplier';
+    const isTA = gameMode === 'time-attack';
+
+    const hasGameTimer = isMULTIPLIER || isTA;
+    const hasComboTimer = isMULTIPLIER;
+
     const animationRef = useRef<number>(0);
     const lastUpdateRef = useRef<number>(0);
     const playgroundRef = useRef<HTMLDivElement>(null);
@@ -341,6 +360,61 @@ function GameBoard({ hasOnGoingCombo, restartComboTimer }: GameBoardProps) {
                     ))}
                 </Fragment>
             </div>
+
+            {(hasGameTimer || hasComboTimer) && (
+                <div
+                    className={cn(
+                        'absolute right-0 top-0 h-full flex items-center gap-x-4 pb-4',
+                        {
+                            '-right-6': hasComboTimer,
+                        },
+                    )}
+                >
+                    {hasComboTimer && (
+                        <div className="flex flex-col h-5/6 w-4 gap-y-4 items-center">
+                            <Zap className="w-6 h-6 text-cyan-300" />
+                            <Progress
+                                max={MULTIPLIER_COMBO_TIMER}
+                                value={comboTimer}
+                                className="h-full rotate-180 w-full bg-secondary/10"
+                                progressBarClassName="bg-secondary"
+                            />
+                        </div>
+                    )}
+
+                    {hasGameTimer && (
+                        <div className="flex flex-col h-5/6 w-4 gap-y-4 items-center">
+                            <Timer
+                                className={cn('w-6 h-6 text-green-400', {
+                                    'text-primary':
+                                        (gameTimer / TA_TIMER) * 100 < 20,
+                                    'text-warning':
+                                        (gameTimer / TA_TIMER) * 100 < 60,
+                                })}
+                            />
+                            <Progress
+                                max={TA_TIMER}
+                                value={gameTimer}
+                                className={cn(
+                                    'h-full rotate-180 w-full bg-green/10',
+                                    {
+                                        'bg-primary/10':
+                                            (gameTimer / TA_TIMER) * 100 < 20,
+                                        'bg-warning/10':
+                                            (gameTimer / TA_TIMER) * 100 < 60,
+                                    },
+                                )}
+                                progressBarClassName={cn('bg-green-400', {
+                                    'bg-primary':
+                                        (gameTimer / TA_TIMER) * 100 < 20,
+                                    'bg-warning':
+                                        (gameTimer / TA_TIMER) * 100 < 60,
+                                })}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
         </section>
     );
 }

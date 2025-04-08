@@ -8,7 +8,7 @@ function getMultiplier(comboCount: number) {
 
     if (comboCount === 0) return 1;
     if (comboCount <= 5) return 1 + (comboCount - 1) * 0.5;
-    if (comboCount < 8) return LIMIT_COMBO_MULTIPLIER;
+    if (comboCount < 10) return LIMIT_COMBO_MULTIPLIER;
 
     return MAX_COMBO_MULTIPLIER;
 }

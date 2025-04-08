@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { GameLabel } from '@/components/GameLabel';
 import { GameBoard } from './_components/GameBoard';
 import { GameOverModal } from './_components/GameOverModal';
@@ -80,17 +79,23 @@ export default function Fujiten() {
         [restartTimer],
     );
 
+    const handleResetComboTimer = useCallback(
+        (autoStart: boolean = true) => {
+            const newComboTimer = generateDateInSeconds(MULTIPLIER_COMBO_TIMER);
+            restartComboTimer(newComboTimer, autoStart);
+        },
+        [restartComboTimer],
+    );
+
     const handleGameStart = (gameMode: GameMode): void => {
         const gridGenarated = generateGrid();
         setGrid(gridGenarated);
 
-        if (gameMode === 'time-attack') {
+        if (gameMode === 'time-attack' || gameMode === 'multiplier')
             startTimer();
-        }
 
-        if (gameMode === 'multiplier') {
-            startComboTimer();
-        }
+        if (gameMode === 'multiplier') startComboTimer();
+
         resetScore();
         resetPositions();
         setGameMode(gameMode);
@@ -98,7 +103,8 @@ export default function Fujiten() {
 
     const handleGameMode = (): void => {
         resetGame();
-        handleResetTimer();
+        handleResetTimer(false);
+        handleResetComboTimer(false);
     };
 
     const handleGameReset = (): void => {
@@ -106,8 +112,11 @@ export default function Fujiten() {
         resetPositions();
         setIsGameOver(false);
 
+        const isMultiplier = gameMode === 'multiplier';
         const isTimeAttack = gameMode === 'time-attack';
-        handleResetTimer(isTimeAttack);
+
+        handleResetTimer(isTimeAttack || isMULTIPLIER);
+        handleResetComboTimer(isMultiplier);
 
         const gridGenarated = generateGrid();
         setGrid(gridGenarated);
@@ -123,17 +132,10 @@ export default function Fujiten() {
     }, [grid, isZEN, setIsGameOver]);
 
     useEffect(() => {
-        if (isTA && grid.length > 0 && timeLeft <= 0) {
+        if ((isTA || isMULTIPLIER) && grid.length > 0 && timeLeft <= 0) {
             setIsGameOver(true);
         }
-    }, [grid, timeLeft, isTA, setIsGameOver]);
-
-    const handleResetComboTimer = useCallback(() => {
-        return restartComboTimer(
-            generateDateInSeconds(MULTIPLIER_COMBO_TIMER),
-            true,
-        );
-    }, [restartComboTimer]);
+    }, [grid, timeLeft, isTA, isMULTIPLIER, setIsGameOver]);
 
     return (
         <main className="min-h-screen max-h-screen">
@@ -179,7 +181,7 @@ export default function Fujiten() {
                                             className="mx-4 mt-8 text-white"
                                             Icon={Zap}
                                             iconClassName={
-                                                currentCombo <= 2
+                                                currentCombo <= 5
                                                     ? 'text-secondary animate-pulse fill-secondary/80'
                                                     : 'text-primary fill-primary/80 animate-pulse'
                                             }
@@ -190,17 +192,10 @@ export default function Fujiten() {
                         </section>
                     </div>
 
-                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center items-center relative">
-                        <div className="absolute right-0 top-0 h-full flex items-center">
-                            <div className="h-full w-3 py-12">
-                                <Progress
-                                    max={TA_TIMER}
-                                    value={timeLeft}
-                                    className="h-full rotate-180"
-                                />
-                            </div>
-                        </div>
+                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center items-center">
                         <GameBoard
+                            gameTimer={timeLeft}
+                            comboTimer={comboTimeLeft}
                             hasOnGoingCombo={comboTimeLeft > 0}
                             restartComboTimer={handleResetComboTimer}
                         />
