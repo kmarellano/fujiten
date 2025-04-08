@@ -22,7 +22,7 @@ const AppleIcon = memo(
                     viewBox="0 0 64 64"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="transition-colors select-none pointer-events-none"
+                    className="transition-colors select-none pointer-events-none touch-none"
                 >
                     <defs>
                         <linearGradient
@@ -71,7 +71,7 @@ const AppleIcon = memo(
                         fill="white"
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        className="select-none"
+                        className="select-none touch-none"
                     >
                         {text}
                     </text>

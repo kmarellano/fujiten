@@ -34,7 +34,9 @@ export default function RootLayout({
                             particleColor="#FFFFFF"
                         />
                     </div>
-                    <div className="relative z-20 select-none">{children}</div>
+                    <div className="relative z-20 select-none touch-none">
+                        {children}
+                    </div>
                 </div>
             </body>
         </html>

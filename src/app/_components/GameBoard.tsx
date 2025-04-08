@@ -73,21 +73,31 @@ function GameBoard({
 
     const getCurrentPosition = (
         ref: React.RefObject<HTMLDivElement | null>,
-        e: React.MouseEvent,
+        e: React.MouseEvent | React.TouchEvent,
     ): Position | undefined => {
         if (!ref.current) return;
 
-        const { clientX, clientY } = e;
+        let clientX: number;
+        let clientY: number;
+
+        if ('touches' in e) {
+            const touch = e.touches[0];
+            clientX = touch.clientX;
+            clientY = touch.clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+
         const { x: fieldX, y: fieldY } = ref.current.getBoundingClientRect();
 
         const x = clientX - fieldX;
         const y = clientY - fieldY;
-
         return { x, y };
     };
 
     const handleMouseDown = useCallback(
-        (e: React.MouseEvent): void => {
+        (e: React.MouseEvent | React.TouchEvent): void => {
             resetPositions();
             const position = getCurrentPosition(playgroundRef, e);
             if (!position) return;
@@ -149,7 +159,7 @@ function GameBoard({
     );
 
     const handleMouseMove = useCallback(
-        (e: React.MouseEvent): void => {
+        (e: React.MouseEvent | React.TouchEvent): void => {
             if (!isSelecting || !initialX || !initialY) return;
 
             const now = Date.now();
@@ -245,8 +255,13 @@ function GameBoard({
     ]);
 
     useEffect(() => {
-        document.addEventListener('mouseup', handleMouseUp);
-        return () => document.removeEventListener('mouseup', handleMouseUp);
+        const handleUp = () => handleMouseUp();
+        document.addEventListener('mouseup', handleUp);
+        document.addEventListener('touchend', handleUp);
+        return () => {
+            document.removeEventListener('mouseup', handleUp);
+            document.removeEventListener('touchend', handleUp);
+        };
     }, [handleMouseUp]);
 
     const getSelectionBoxStyle = (): SelectionBoxStyle | null => {
@@ -293,11 +308,15 @@ function GameBoard({
     return (
         <section id="game-board" className="relative min-h-fit max-h-fit">
             <div
-                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] max-h-fit h-auto select-none"
+                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] max-h-fit h-auto select-none touch-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
+                onTouchStart={handleMouseDown}
+                onTouchMove={handleMouseMove}
+                onTouchEnd={handleMouseUp}
+                onTouchCancel={handleMouseUp}
                 ref={playgroundRef}
                 style={{
                     gridTemplateColumns: `repeat(${GRID_COL}, minmax(0, 1fr))`,
