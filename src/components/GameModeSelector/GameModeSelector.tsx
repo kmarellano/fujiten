@@ -45,6 +45,12 @@ function GameModeSelector({ onStart }: GameModeSelectorProps) {
                         ))}
                     </div>
 
+                    <div className="text-center text-muted-foreground mb-4">
+                        <p className="text-lg font-medium">HOW TO PLAY:</p>
+                        <p className="text-sm">
+                            Click and drag to select numbers that add up to 10
+                        </p>
+                    </div>
                     <Button
                         className="w-full mt-6 py-6 text-base sm:text-lg bg-primary hover:bg-primary/90 arcade-button"
                         onClick={() => onStart(selectedMode)}
