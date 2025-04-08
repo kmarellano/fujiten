@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useRef, useMemo, Fragment } from 'react';
+import { useEffect, useCallback, useRef, useMemo } from 'react';
 import { useGameStore } from '@/stores';
 import { AppleIcon } from '@/components/AppleIcon';
 import { Progress } from '@/components/ui/progress';
@@ -291,9 +291,9 @@ function GameBoard({
         isSelecting && initialX && initialY && currentX && currentY;
 
     return (
-        <section id="game-board" className="relative">
+        <section id="game-board" className="relative min-h-fit max-h-fit">
             <div
-                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] h-auto select-none"
+                className="grid mb-6 p-12 w-fit max-h-fit h-auto select-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -304,62 +304,60 @@ function GameBoard({
                     gridTemplateRows: `repeat(${GRID_ROW}, minmax(0, 1fr))`,
                 }}
             >
-                <Fragment>
-                    {grid.map((row, rowIndex) => {
-                        if (!cellRefs.current[rowIndex]) {
-                            cellRefs.current[rowIndex] = [];
-                        }
+                {grid.map((row, rowIndex) => {
+                    if (!cellRefs.current[rowIndex]) {
+                        cellRefs.current[rowIndex] = [];
+                    }
 
-                        return row.map((num, colIndex) => (
-                            <div
-                                key={`${rowIndex}-${colIndex}`}
-                                ref={(el) => {
-                                    cellRefs.current[rowIndex][colIndex] = el;
-                                }}
-                            >
-                                {num !== null && (
-                                    <AppleIcon
-                                        text={num}
-                                        size="sm"
-                                        {...selectedCellDesign({
-                                            row: rowIndex,
-                                            col: colIndex,
-                                        })}
-                                    />
-                                )}
-                            </div>
-                        ));
-                    })}
-
-                    {isUserPlaying && (
+                    return row.map((num, colIndex) => (
                         <div
-                            className={cn(
-                                'absolute border-2 border-destructive/80 bg-destructive/30 pointer-events-none z-10',
-                                {
-                                    'border-2 border-amber-200 bg-amber-400/40 shadow-lg':
-                                        selectedCells.sum === MAX_NUMBER + 1,
-                                },
-                            )}
-                            style={getSelectionBoxStyle() || {}}
-                        ></div>
-                    )}
-
-                    {animatedApples.map((apple) => (
-                        <div
-                            key={apple.id}
-                            className="absolute pointer-events-none animate-pop"
-                            style={{
-                                position: 'fixed',
-                                left: `${apple.x}px`,
-                                top: `${apple.y}px`,
-                                transform: `translate(-50%, -50%) rotate(${apple.rotation}deg))`,
+                            key={`${rowIndex}-${colIndex}`}
+                            ref={(el) => {
+                                cellRefs.current[rowIndex][colIndex] = el;
                             }}
                         >
-                            <AppleIcon text={apple.value} size="sm" />
+                            {num !== null && (
+                                <AppleIcon
+                                    text={num}
+                                    size="sm"
+                                    {...selectedCellDesign({
+                                        row: rowIndex,
+                                        col: colIndex,
+                                    })}
+                                />
+                            )}
                         </div>
-                    ))}
-                </Fragment>
+                    ));
+                })}
             </div>
+
+            {isUserPlaying && (
+                <div
+                    className={cn(
+                        'absolute border-2 border-destructive/80 bg-destructive/30 pointer-events-none z-10',
+                        {
+                            'border-2 border-amber-200 bg-amber-400/40 shadow-lg':
+                                selectedCells.sum === MAX_NUMBER + 1,
+                        },
+                    )}
+                    style={getSelectionBoxStyle() || {}}
+                ></div>
+            )}
+
+            {animatedApples.map((apple) => (
+                <div
+                    key={apple.id}
+                    className="absolute pointer-events-none animate-pop"
+                    style={{
+                        position: 'fixed',
+                        left: `${apple.x}px`,
+                        top: `${apple.y}px`,
+                        transform: `translate(-50%, -50%) rotate(${apple.rotation}deg))`,
+                    }}
+                >
+                    <AppleIcon text={apple.value} size="sm" />
+                </div>
+            ))}
 
             {(hasGameTimer || hasComboTimer) && (
                 <div
