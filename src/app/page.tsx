@@ -6,6 +6,11 @@ import { GameLabel } from '@/components/GameLabel';
 import { GameBoard } from './_components/GameBoard';
 import { GameOverModal } from './_components/GameOverModal';
 import { GameModeSelector } from '@/components/GameModeSelector';
+import {
+    withAudioLayout,
+    AudioControls,
+} from '@/components/layouts/AudioLayout';
+
 import { Zap } from 'lucide-react';
 
 import { useGameStore } from '@/stores';
@@ -21,7 +26,9 @@ import {
 import { TA_TIMER, MULTIPLIER_COMBO_TIMER } from '@/config/gameConstants';
 import { GameMode } from '@/types';
 
-export default function Fujiten() {
+interface FujitenProps extends AudioControls {}
+
+function Fujiten({ playAudio, stopAudio }: FujitenProps) {
     const {
         grid,
         score,
@@ -89,6 +96,8 @@ export default function Fujiten() {
     );
 
     const handleGameStart = (gameMode: GameMode): void => {
+        playAudio();
+
         const gridGenarated = generateGrid();
         setGrid(gridGenarated);
 
@@ -106,6 +115,7 @@ export default function Fujiten() {
         resetGame();
         handleResetTimer(false);
         handleResetComboTimer(false);
+        stopAudio();
     };
 
     const handleGameReset = (): void => {
@@ -237,3 +247,5 @@ export default function Fujiten() {
         </main>
     );
 }
+
+export default withAudioLayout(Fujiten);
