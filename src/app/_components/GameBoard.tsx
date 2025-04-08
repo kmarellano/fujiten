@@ -208,7 +208,7 @@ function GameBoard({
         if (animatedApples.length === 0) return;
 
         let rafId: number;
-        const gravity = 2;
+        const gravity = 1.5;
 
         const animate = () => {
             updateAnimatedApples(gravity);
