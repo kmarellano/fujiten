@@ -20,7 +20,7 @@ export interface AudioControls {
 export function withAudioLayout<P>(
     WrappedComponent: ComponentType<P & AudioControls>,
 ): React.FC<P> {
-    return (props: P) => {
+    const ComponentWithAudioLayout = (props: P) => {
         const audioRef = useRef<HTMLAudioElement>(null);
         const [volume, setVolume] = useState(1);
         const [isMuted, setIsMuted] = useState(false);
@@ -91,4 +91,8 @@ export function withAudioLayout<P>(
             </div>
         );
     };
+
+    ComponentWithAudioLayout.displayName = `WithAudioLayout(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+    return ComponentWithAudioLayout;
 }
