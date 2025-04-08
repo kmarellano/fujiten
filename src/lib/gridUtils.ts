@@ -1,4 +1,4 @@
-import { Grid, SelectedPositions } from '@/types';
+import { Grid } from '@/types';
 import { MAX_NUMBER } from '@/config/gridConstants';
 
 const getNumbersInBox = (
