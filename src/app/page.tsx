@@ -42,6 +42,7 @@ export default function Fujiten() {
     const isZEN = gameMode === 'zen';
     const isTA = gameMode === 'time-attack';
     const isMULTIPLIER = gameMode === 'multiplier';
+    const isCASCADE = gameMode === 'cascade';
 
     const {
         totalSeconds: timeLeft,
@@ -123,13 +124,13 @@ export default function Fujiten() {
     };
 
     useEffect(() => {
-        if (isZEN && grid.length > 0) {
+        if ((isZEN || isCASCADE) && grid.length > 0) {
             const hasMoves = GridSolver.hasPossibleSums(grid);
             if (!hasMoves) {
                 setIsGameOver(true);
             }
         }
-    }, [grid, isZEN, setIsGameOver]);
+    }, [grid, isZEN, isCASCADE, setIsGameOver]);
 
     useEffect(() => {
         if ((isTA || isMULTIPLIER) && grid.length > 0 && timeLeft <= 0) {
