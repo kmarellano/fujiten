@@ -3,4 +3,5 @@ export interface AppleIconProps {
     color?: string;
     highlight?: string;
     stroke?: string;
+    className?: string;
 }

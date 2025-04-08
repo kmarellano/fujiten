@@ -374,7 +374,11 @@ function GameBoard({
                         transform: `translate(-50%, -50%) rotate(${apple.rotation}deg))`,
                     }}
                 >
-                    <AppleIcon text={apple.value} size="sm" />
+                    <AppleIcon
+                        text={apple.value}
+                        size="sm"
+                        className="sm:w-fit w-6"
+                    />
                 </div>
             ))}
 

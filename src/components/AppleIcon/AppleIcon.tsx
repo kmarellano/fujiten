@@ -1,5 +1,6 @@
 import { memo, useMemo, forwardRef } from 'react';
 import { AppleIconProps } from '@/types';
+import { cn } from '@/lib/utils';
 
 const sizeMap = {
     sm: '70',
@@ -12,7 +13,16 @@ const sizeMap = {
 
 const AppleIcon = memo(
     forwardRef<SVGSVGElement, AppleIconProps & { size?: keyof typeof sizeMap }>(
-        ({ text = 1, size = 'sm', highlight = '', stroke = '' }, ref) => {
+        (
+            {
+                text = 1,
+                size = 'sm',
+                highlight = '',
+                stroke = '',
+                className = '',
+            },
+            ref,
+        ) => {
             const svgSize = useMemo(() => sizeMap[size], [size]);
 
             return (
@@ -23,7 +33,10 @@ const AppleIcon = memo(
                     viewBox="0 0 64 64"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="transition-colors select-none pointer-events-none h-full w-full"
+                    className={cn(
+                        'transition-colors select-none pointer-events-none h-full w-full',
+                        className,
+                    )}
                 >
                     <defs>
                         <linearGradient
