@@ -138,9 +138,9 @@ export default function Fujiten() {
     }, [grid, timeLeft, isTA, isMULTIPLIER, setIsGameOver]);
 
     return (
-        <main className="min-h-screen max-h-screen">
+        <main className="sm:max-h-screen sm:min-h-fit min-h-screen">
             {gameMode ? (
-                <div className="parent grid grid-cols-6 grid-rows-7 gap-0 min-h-screen min-w-full max-h-screen">
+                <div className="parent flex flex-col 2xl:grid-cols-6 2xl:grid-rows-7 gap-0 2xl:grid max-w-screen">
                     <div className="col-span-5 row-span-1 col-start-1 row-start-1 flex items-center justify-center">
                         <section
                             id="scoring"
@@ -192,7 +192,7 @@ export default function Fujiten() {
                         </section>
                     </div>
 
-                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center items-center">
+                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center w-full">
                         <GameBoard
                             gameTimer={timeLeft}
                             comboTimer={comboTimeLeft}
@@ -201,24 +201,22 @@ export default function Fujiten() {
                         />
                     </div>
 
-                    <div className="col-span-1 row-span-7 col-start-6 row-start-1 flex items-end justify-center">
-                        <div className="flex flex-col gap-12 mb-10">
-                            <Button
-                                onClick={handleGameMode}
-                                className="font-bold text-2xl text-success hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
-                                variant="link"
-                            >
-                                GAME MODES
-                            </Button>
+                    <div className="col-span-1 row-span-7 col-start-6 row-start-1 mb-16 flex flex-row gap-y-16 2xl:flex-col 2xl:justify-end justify-center">
+                        <Button
+                            onClick={handleGameMode}
+                            className="font-bold text-2xl text-success hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
+                            variant="link"
+                        >
+                            GAME MODES
+                        </Button>
 
-                            <Button
-                                onClick={handleGameReset}
-                                className="font-bold text-2xl text-destructive hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
-                                variant="link"
-                            >
-                                RESET GAME
-                            </Button>
-                        </div>
+                        <Button
+                            onClick={handleGameReset}
+                            className="font-bold text-2xl text-destructive hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
+                            variant="link"
+                        >
+                            RESET GAME
+                        </Button>
                     </div>
                 </div>
             ) : (

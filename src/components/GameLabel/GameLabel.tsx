@@ -24,7 +24,7 @@ function GameLabel({
         <div className={cn('text-center', className)}>
             <h3
                 className={cn(
-                    'font-bold text-3xl text-accent',
+                    'font-bold sm:text-3xl text-accent text-base',
                     headerClassName,
                 )}
             >
@@ -32,7 +32,7 @@ function GameLabel({
             </h3>
             <p
                 className={cn(
-                    'inline-flex items-center text-2xl',
+                    'inline-flex items-center sm:text-2xl text-xs',
                     descriptionClassName,
                 )}
             >
