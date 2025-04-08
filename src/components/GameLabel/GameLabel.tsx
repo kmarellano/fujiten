@@ -24,7 +24,7 @@ function GameLabel({
         <div className={cn('text-center', className)}>
             <h3
                 className={cn(
-                    'font-bold sm:text-3xl text-accent text-base',
+                    'font-bold sm:text-2xl  2xl:text-3xl  text-accent text-base',
                     headerClassName,
                 )}
             >

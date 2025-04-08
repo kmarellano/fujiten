@@ -72,14 +72,14 @@ export function GameOverModal({
                 <DialogFooter className="grid grid-cols-2 sm:gap-4 sm:items-end">
                     <Button
                         onClick={onChangeMode}
-                        className="w-full sm:w-auto col-span-1 py-4 text-lg text-secondary hover:bg-secondary/10 hover:text-secondary-foreground bg-transparent arcade-button"
+                        className="w-full sm:w-auto col-span-1 py-4 text-secondary hover:bg-secondary/10 hover:text-secondary-foreground bg-transparent arcade-button text-xs md:text-base lg:text-lg"
                     >
                         CHANGE MODE
                     </Button>
 
                     <Button
                         onClick={onRestart}
-                        className="w-full sm:w-auto arcade-button col-span-1 py-4 text-lg"
+                        className="w-full sm:w-auto arcade-button col-span-1 py-4 text-xs md:text-base lg:text-lg"
                     >
                         PLAY AGAIN
                     </Button>

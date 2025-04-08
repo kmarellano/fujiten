@@ -306,9 +306,9 @@ function GameBoard({
         isSelecting && initialX && initialY && currentX && currentY;
 
     return (
-        <section id="game-board" className="relative min-h-fit max-h-fit">
+        <section id="game-board" className="relative h-full w-full">
             <div
-                className="grid mb-6 p-12 w-fit min-h-[50rem] min-w-[70rem] max-h-fit h-auto select-none touch-none"
+                className="grid h-full w-full p-12 select-none touch-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -337,8 +337,8 @@ function GameBoard({
                         >
                             {num !== null && (
                                 <AppleIcon
+                                    size="full"
                                     text={num}
-                                    size="sm"
                                     {...selectedCellDesign({
                                         row: rowIndex,
                                         col: colIndex,
@@ -379,16 +379,9 @@ function GameBoard({
             ))}
 
             {(hasGameTimer || hasComboTimer) && (
-                <div
-                    className={cn(
-                        'absolute right-0 top-0 h-full flex items-center gap-x-4 pb-4',
-                        {
-                            '-right-6': hasComboTimer,
-                        },
-                    )}
-                >
+                <div className="absolute right-0 top-0 h-full flex items-center gap-x-4 pb-12">
                     {hasComboTimer && (
-                        <div className="flex flex-col h-5/6 w-4 gap-y-4 items-center">
+                        <div className="flex flex-col h-full w-2 sm:w-4 gap-y-4 items-center">
                             <Zap className="w-6 h-6 text-cyan-300" />
                             <Progress
                                 max={MULTIPLIER_COMBO_TIMER}
@@ -400,7 +393,7 @@ function GameBoard({
                     )}
 
                     {hasGameTimer && (
-                        <div className="flex flex-col h-5/6 w-4 gap-y-4 items-center">
+                        <div className="flex flex-col h-full w-2 sm:w-4 gap-y-4 items-center">
                             <Timer
                                 className={cn('w-6 h-6 text-green-400', {
                                     'text-primary':

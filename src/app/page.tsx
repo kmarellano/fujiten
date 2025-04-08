@@ -149,47 +149,49 @@ function Fujiten({ playAudio, stopAudio }: FujitenProps) {
     }, [grid, timeLeft, isTA, isMULTIPLIER, setIsGameOver]);
 
     return (
-        <main className="sm:max-h-screen sm:min-h-fit min-h-screen">
+        <main className="sm:max-h-screen sm:min-h-fit min-h-screen overflow-auto">
             {gameMode ? (
-                <div className="parent flex flex-col 2xl:grid-cols-6 2xl:grid-rows-7 gap-0 2xl:grid max-w-screen">
-                    <div className="col-span-5 row-span-1 col-start-1 row-start-1 flex items-center justify-center">
+                <div className="parent flex flex-col 2xl:grid-cols-6 2xl:grid-rows-7 gap-0 2xl:grid max-h-screen max-w-screen overflow-hidden">
+                    <div className="col-span-5 row-span-1 col-start-1 row-start-1 flex items-center justify-center px-4 py-2">
                         <section
                             id="scoring"
-                            className="place-items-center flex flex-col col-span-8"
+                            className="w-full flex items-center justify-center"
                         >
                             <div
                                 className={cn(
-                                    'justify-self-start h-fit w-full text-center',
+                                    'w-full text-center grid gap-4 grid-cols-1',
                                     {
-                                        'grid grid-cols-3': isMULTIPLIER,
+                                        'sm:grid-cols-3': isMULTIPLIER,
                                     },
                                 )}
                             >
                                 {isMULTIPLIER && (
-                                    <div className="flex justify-start">
+                                    <div className="flex justify-center sm:justify-start">
                                         <GameLabel
                                             header="COMBO"
                                             headerClassName="text-secondary"
                                             description={currentCombo}
-                                            className="mx-4 mt-8"
+                                            className="mx-2"
                                         />
                                     </div>
                                 )}
 
-                                <GameLabel
-                                    className="mx-4 mt-8"
-                                    header="SCORE"
-                                    headerClassName="text-primary"
-                                    description={score}
-                                />
+                                <div className="flex justify-center">
+                                    <GameLabel
+                                        className="mx-2"
+                                        header="SCORE"
+                                        headerClassName="text-primary"
+                                        description={score}
+                                    />
+                                </div>
 
                                 {isMULTIPLIER && (
-                                    <div className="flex justify-end">
+                                    <div className="flex justify-center sm:justify-end">
                                         <GameLabel
                                             header="MULTIPLIER"
                                             description={`${scoreMultiplier}X`}
                                             headerClassName="text-purple-500"
-                                            className="mx-4 mt-8 text-white"
+                                            className="mx-2 text-white"
                                             Icon={Zap}
                                             iconClassName={
                                                 currentCombo <= 5
@@ -203,7 +205,7 @@ function Fujiten({ playAudio, stopAudio }: FujitenProps) {
                         </section>
                     </div>
 
-                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center w-full">
+                    <div className="col-span-5 row-span-6 col-start-1 row-start-2 flex justify-center w-full h-full">
                         <GameBoard
                             gameTimer={timeLeft}
                             comboTimer={comboTimeLeft}
@@ -212,10 +214,10 @@ function Fujiten({ playAudio, stopAudio }: FujitenProps) {
                         />
                     </div>
 
-                    <div className="col-span-1 row-span-7 col-start-6 row-start-1 mb-16 flex flex-row gap-y-16 2xl:flex-col 2xl:justify-end justify-center">
+                    <div className="col-span-1 row-span-7 col-start-6 row-start-1 flex flex-col gap-4 items-center justify-end h-full py-4 2xl:flex-col 2xl:gap-y-16 2xl:justify-end 2xl:items-center">
                         <Button
                             onClick={handleGameMode}
-                            className="font-bold text-2xl text-success hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
+                            className="font-bold text-lg sm:text-xl 2xl:text-2xl text-success hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-center"
                             variant="link"
                         >
                             GAME MODES
@@ -223,7 +225,7 @@ function Fujiten({ playAudio, stopAudio }: FujitenProps) {
 
                         <Button
                             onClick={handleGameReset}
-                            className="font-bold text-2xl text-destructive hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-left"
+                            className="font-bold text-lg sm:text-xl 2xl:text-2xl text-destructive hover:brightness-120 select-none cursor-pointer transition-colors duration-200 text-center"
                             variant="link"
                         >
                             RESET GAME
